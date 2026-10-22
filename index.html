@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4d347f">
+<title>نِبراس | اكتشف جامعة الطائف</title>
+<style>
+:root{--purple:#56378b;--deep:#302052;--lilac:#eee8fa;--lav:#f7f3ff;--ink:#282238;--muted:#777187;--line:#e9e3f2;--gold:#f4c86a}
+*{box-sizing:border-box}body{margin:0;background:#f3eff9;color:var(--ink);font-family:Tahoma,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer;border:0}
+.app{max-width:1120px;margin:auto;min-height:100vh;background:#fff;box-shadow:0 12px 50px #2d1c4b18;display:grid;grid-template-columns:230px 1fr}
+.sidebar{background:linear-gradient(160deg,#352052,#60439a);color:#fff;padding:25px 16px;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 24px;border-bottom:1px solid #ffffff2c;margin-bottom:8px}.logo{width:44px;height:44px;border-radius:15px;background:#ffffff22;display:grid;place-items:center;font-size:24px}.brand b{font-size:20px}.brand small{display:block;color:#ded2f5;font-size:11px;margin-top:4px}
+.nav{display:flex;align-items:center;gap:12px;text-align:right;color:#eee6ff;background:transparent;border-radius:13px;padding:13px 14px;font-size:14px}.nav.active,.nav:hover{background:#ffffff21;color:white}.nav span{font-size:19px;width:24px;text-align:center}.side-note{margin-top:auto;font-size:11px;color:#ded2f5;line-height:1.8;padding:12px}
+main{min-width:0;padding:24px 28px 90px;background:linear-gradient(#fbfaff,#fff 260px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}.eyebrow{color:var(--purple);font-size:12px;font-weight:bold}.top h1{margin:7px 0 0;font-size:25px}.avatar{border-radius:50%;width:45px;height:45px;background:var(--lilac);display:grid;place-items:center;font-size:22px}
+.hero{background:linear-gradient(120deg,#302052,#61469c);color:#fff;border-radius:25px;padding:25px;display:grid;grid-template-columns:1.3fr .7fr;gap:18px;overflow:hidden;position:relative}.hero h2{font-size:26px;line-height:1.5;margin:8px 0}.hero p{color:#e9defa;line-height:1.8;font-size:14px;margin:0 0 18px}.hero-art{display:grid;place-items:center;font-size:100px;opacity:.95}.pill{display:inline-flex;align-items:center;gap:7px;background:#ffffff20;border:1px solid #ffffff30;border-radius:30px;padding:8px 12px;font-size:12px}.primary,.secondary{border-radius:12px;padding:12px 16px;font-weight:bold}.primary{background:#fff;color:var(--purple)}.secondary{background:var(--purple);color:#fff}.section-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 13px}.section-head h3{margin:0;font-size:18px}.muted{color:var(--muted);font-size:12px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.quick button{background:#fff;border:1px solid var(--line);border-radius:17px;padding:17px 10px;text-align:center;color:var(--ink);box-shadow:0 4px 14px #35205208}.quick button:hover{border-color:#b9a4e0;transform:translateY(-1px)}.quick .ico{font-size:26px;display:block;margin-bottom:9px}.quick b{font-size:13px;display:block}.quick small{font-size:11px;color:var(--muted);display:block;margin-top:6px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.place{border:1px solid var(--line);border-radius:17px;padding:16px;background:#fff}.place .emoji{font-size:27px}.place h4{margin:12px 0 7px}.place p{font-size:12px;color:var(--muted);line-height:1.7;margin:0 0 12px}.textbtn{background:var(--lav);color:var(--purple);border-radius:10px;padding:9px 11px;font-size:12px;font-weight:bold}
+.page{display:none}.page.active{display:block}.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:18px}.map-layout{display:grid;grid-template-columns:1fr 280px;gap:16px}.mapbox{min-height:350px;border-radius:18px;position:relative;overflow:hidden;background:#e9f0e7;border:1px solid #dbe4d7;background-image:linear-gradient(35deg,transparent 47%,#fff 48%,#fff 51%,transparent 52%),linear-gradient(120deg,transparent 47%,#fff 48%,#fff 51%,transparent 52%);background-size:120px 100px,160px 120px}.map-label{position:absolute;background:#fff;border:1px solid #ded6ea;border-radius:12px;padding:9px 11px;font-size:12px;box-shadow:0 4px 10px #2221}.pin{position:absolute;width:36px;height:36px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--purple);color:white;display:grid;place-items:center;box-shadow:0 4px 10px #35205235}.pin span{transform:rotate(45deg)}.destlist{display:flex;flex-direction:column;gap:9px}.dest{padding:12px;border:1px solid var(--line);background:#fff;border-radius:12px;text-align:right}.dest.active{background:var(--lav);border-color:#bba6e5}.dest b{display:block;font-size:13px}.dest small{display:block;color:var(--muted);margin-top:5px;font-size:11px}
+.camera{height:440px;border-radius:18px;background:#333 url("images/computer-college-12.jpg") center 58%/cover no-repeat;position:relative;overflow:hidden;display:grid;place-items:center;color:#fff;transition:background-image .2s}.camera:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#fff1 1px,transparent 1px),linear-gradient(#fff1 1px,transparent 1px);background-size:42px 42px;opacity:.25}.cam-overlay{position:relative;text-align:center;background:#211b3299;padding:18px;border-radius:18px;max-width:85%;backdrop-filter:blur(4px)}.arrow{font-size:60px;line-height:1;color:#f7d476;text-shadow:0 4px 15px #0007}.cam-tag{position:absolute;top:14px;right:14px;background:#211b32b5;border-radius:30px;padding:8px 12px;font-size:12px}.chat{display:flex;flex-direction:column;gap:12px;max-height:310px;overflow:auto;padding:4px}.bubble{max-width:85%;padding:12px 14px;border-radius:16px;line-height:1.7;font-size:13px;background:var(--lav);align-self:flex-start}.bubble.me{background:var(--purple);color:#fff;align-self:flex-end}.chatform{display:flex;gap:8px;margin-top:12px}.chatform input{flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;outline:none}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:var(--lav);border-radius:14px;padding:15px;text-align:center}.stat b{display:block;font-size:23px;color:var(--purple)}.stat small{font-size:11px;color:var(--muted)}
+.bottom{display:none}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#302052;color:#fff;padding:12px 18px;border-radius:13px;box-shadow:0 8px 25px #0002;display:none;z-index:10;font-size:13px;max-width:90vw;text-align:center}
+@media(max-width:760px){.app{display:block;min-height:100vh}.sidebar{display:none}main{padding:18px 15px 92px}.top h1{font-size:21px}.hero{grid-template-columns:1fr;padding:20px}.hero h2{font-size:23px}.hero-art{display:none}.quick{grid-template-columns:repeat(2,1fr);gap:9px}.cards{grid-template-columns:1fr}.map-layout{grid-template-columns:1fr}.mapbox{min-height:300px}.destlist{display:grid;grid-template-columns:repeat(2,1fr)}.bottom{position:fixed;bottom:0;right:0;left:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 3px calc(8px + env(safe-area-inset-bottom));z-index:5;box-shadow:0 -5px 20px #3520520a}.bottom button{background:transparent;color:var(--muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 7px}.bottom button span{font-size:20px}.bottom button.active{color:var(--purple);font-weight:bold}.section-head{margin-top:22px}.stats{gap:7px}.stat{padding:12px 5px}.stat b{font-size:20px}.camera{height:390px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="logo">✦</div><div><b>نِبراس</b><small>اكتشف جامعة الطائف</small></div></div>
+ <button class="nav active" data-page="home"><span>⌂</span> الرئيسية</button>
+ <button class="nav" data-page="map"><span>⌖</span> خريطة الجامعة</button>
+ <button class="nav" data-page="ar"><span>✧</span> وجّهيني · AR</button>
+ <button class="nav" data-page="assistant"><span>✦</span> المساعد الذكي</button>
+ <button class="nav" data-page="profile"><span>♙</span> ملفي الشخصي</button>
+ <div class="side-note">نسخة تجريبية للعرض أمام لجنة التحكيم.<br>بعض الميزات محاكاة توضيحية.</div>
+</aside>
+<main>
+<header class="top"><div><div class="eyebrow">جامعة الطائف · TAIF UNIVERSITY</div><h1 id="pageTitle">اكتشفي جامعتك بطريقة جديدة</h1></div><div class="avatar">👩🏻‍🎓</div></header>
+
+<section class="page active" id="home">
+ <div class="hero"><div><span class="pill">✦ رحلتك الجامعية تبدأ هنا</span><h2>كل زاوية في الجامعة<br>لها حكاية.</h2><p>استكشفي المرافق، اعرفي وجهتك، وجرّبي تجربة إرشادية تفاعلية في مكان واحد.</p><button class="primary" onclick="showPage('map')">ابدئي الاستكشاف ←</button></div><div class="hero-art">🏛️</div></div>
+ <div class="section-head"><h3>ماذا تريدين أن تكتشفي؟</h3><span class="muted">اختاري تجربة</span></div>
+ <div class="quick">
+  <button onclick="showPage('map')"><span class="ico">🗺️</span><b>خريطة الجامعة</b><small>اختاري وجهتك</small></button>
+  <button onclick="showPage('ar')"><span class="ico">📍</span><b>وجّهيني</b><small>تجربة AR توضيحية</small></button>
+  <button onclick="showPage('assistant')"><span class="ico">🤖</span><b>اسألي نِبراس</b><small>مساعد تجريبي</small></button>
+  <button onclick="showPage('profile')"><span class="ico">🏅</span><b>إنجازاتي</b><small>تابعي تقدمك</small></button>
+ </div>
+ <div class="section-head"><h3>وجهات مقترحة</h3><span class="muted">بيانات توضيحية</span></div>
+ <div class="cards">
+  <article class="place"><div class="emoji">🏛️</div><h4>مبنى الكليات</h4><p>استكشفي مباني الكليات وتعرّفي على الوجهات التعليمية.</p><button class="textbtn" onclick="choosePlace('مبنى الكليات')">عرض الوجهة</button></article>
+  <article class="place"><div class="emoji">📚</div><h4>المكتبة</h4><p>مساحة للدراسة والبحث والوصول إلى المصادر المعرفية.</p><button class="textbtn" onclick="choosePlace('المكتبة')">عرض الوجهة</button></article>
+  <article class="place"><div class="emoji">☕</div><h4>الخدمات الطلابية</h4><p>تعرّفي على الخدمات والمرافق التي قد تحتاجينها خلال يومك.</p><button class="textbtn" onclick="choosePlace('الخدمات الطلابية')">عرض الوجهة</button></article>
+ </div>
+</section>
+
+<section class="page" id="map">
+ <div class="panel"><div class="section-head" style="margin-top:0"><h3>خريطة استكشاف الجامعة</h3><span class="pill" style="background:var(--lav);color:var(--purple)">نموذج توضيحي</span></div><p class="muted">اختاري وجهة من القائمة لعرض بطاقة معلومات تجريبية. مواضع الخريطة ليست إحداثيات رسمية.</p>
+ <div class="map-layout"><div class="mapbox" id="mapbox">
+ <span class="map-label" style="top:14%;right:10%">بوابة الجامعة</span><span class="map-label" style="top:37%;left:8%">مواقف</span><span class="map-label" style="bottom:15%;right:35%">مساحات خضراء</span>
+ <div class="pin" style="top:30%;right:43%"><span>🏛️</span></div><div class="pin" style="top:55%;left:29%;background:#c18a39"><span>📚</span></div><div class="pin" style="top:63%;right:17%;background:#4c8a78"><span>☕</span></div>
+ </div><div><div class="destlist">
+ <button class="dest active" onclick="choosePlace('مبنى الكليات',this)"><b>🏛️ مبنى الكليات</b><small>وجهة تعليمية</small></button>
+ <button class="dest" onclick="choosePlace('المكتبة',this)"><b>📚 المكتبة</b><small>دراسة وبحث</small></button>
+ <button class="dest" onclick="choosePlace('الخدمات الطلابية',this)"><b>☕ الخدمات الطلابية</b><small>خدمات ومرافق</small></button>
+ <button class="dest" onclick="choosePlace('المواقف',this)"><b>🚗 المواقف</b><small>مواقف المركبات</small></button>
+ </div><div class="panel" style="padding:14px;margin-top:12px"><b id="placeTitle">مبنى الكليات</b><p id="placeDesc" class="muted" style="line-height:1.8">وجهة تعليمية ضمن تجربة الاستكشاف التوضيحية.</p><button class="secondary" onclick="showPage('ar')">جرّبي التوجيه ←</button></div></div></div></div>
+</section>
+
+<section class="page" id="ar">
+ <div class="panel"><div class="section-head" style="margin-top:0"><h3>وجّهيني · تجربة الواقع المعزز</h3><span class="pill" style="background:var(--lav);color:var(--purple)">محاكاة</span></div><p class="muted">هذه محاكاة بصرية لفكرة التوجيه؛ الأسهم لا تعتمد على موقعك أو اتجاه الكاميرا.</p>
+ <div class="camera" id="cameraScene"><span class="cam-tag">● محاكاة الكاميرا · نِبراس</span><div class="cam-overlay"><div class="arrow">⬆</div><h3 style="margin:8px 0">كلية الحاسبات</h3><p style="font-size:12px;line-height:1.8;margin:0">الوجهة: <b id="arDest">كلية الحاسبات · مبنى 12</b><br>سهم إرشادي افتراضي · ليست كاميرا مباشرة</p></div></div>
+ <div class="section-head"><h3>اختاري المبنى لتجربة المشهد</h3><span class="muted">صور من الحرم الجامعي</span></div><div class="quick">
+ <button onclick="setARScene('computer-college-12.jpg','كلية الحاسبات · مبنى 12')"><span class="ico">🏫</span><b>كلية الحاسبات</b><small>مبنى 12</small></button>
+ <button onclick="setARScene('science-labs-5.jpg','معامل كلية العلوم · مبنى 5')"><span class="ico">🧪</span><b>معامل كلية العلوم</b><small>مبنى 5</small></button>
+ <button onclick="setARScene('classrooms-6.jpg','الفصول الدراسية · مبنى 6')"><span class="ico">📚</span><b>الفصول الدراسية</b><small>مبنى 6</small></button>
+ <button onclick="toast('هذه تجربة محاكاة؛ لا يتم تشغيل كاميرا حقيقية أو تحديد موقعك.')"><span class="ico">🛡️</span><b>الخصوصية</b><small>لا تتبّع للموقع</small></button></div>
+ </div>
+</section>
+
+<section class="page" id="assistant">
+ <div class="panel"><div class="section-head" style="margin-top:0"><h3>اسألي نِبراس</h3><span class="pill" style="background:var(--lav);color:var(--purple)">مساعد تجريبي</span></div><p class="muted">اختاري سؤالًا جاهزًا أو اكتبي سؤالك. الردود في هذا النموذج معدّة مسبقًا وليست ذكاءً اصطناعيًا متصلًا.</p>
+ <div class="quick" style="grid-template-columns:repeat(2,1fr);margin-bottom:18px"><button onclick="askPreset('كيف أبدأ استكشاف الجامعة؟')">🗺️ كيف أبدأ الاستكشاف؟</button><button onclick="askPreset('ما فائدة الواقع المعزز؟')">📍 ما فائدة الواقع المعزز؟</button><button onclick="askPreset('كيف أصل إلى المكتبة؟')">📚 كيف أصل إلى المكتبة؟</button><button onclick="askPreset('هل يتم حفظ موقعي؟')">🛡️ هل يتم حفظ موقعي؟</button></div>
+ <div class="chat" id="chat"><div class="bubble">أهلًا بكِ! أنا نِبراس، المساعد التجريبي. اختاري سؤالًا بالأعلى أو اكتبي سؤالك لتجربة النموذج. ✨</div></div>
+ <form class="chatform" onsubmit="sendChat(event)"><input id="chatInput" placeholder="اكتبي سؤالك هنا..." aria-label="اكتبي سؤالك"><button class="secondary">إرسال</button></form>
+ </div>
+</section>
+
+<section class="page" id="profile">
+ <div class="hero"><div><span class="pill">👩🏻‍🎓 ملف الطالبة</span><h2>كل خطوة إنجاز ✨</h2><p>واجهة تجريبية لعرض تقدم الطالبة وشارات الاستكشاف داخل التطبيق.</p></div><div class="hero-art">🎓</div></div>
+ <div class="panel"><div class="section-head" style="margin-top:0"><h3>طالبة جامعة الطائف</h3><span class="muted">مستكشفة جديدة</span></div><div class="stats"><div class="stat"><b id="progress">25%</b><small>التقدم التجريبي</small></div><div class="stat"><b id="badges">01</b><small>شارات مكتسبة</small></div><div class="stat"><b id="visited">03</b><small>أماكن مستكشفة</small></div></div><div class="section-head"><h3>إنجازاتك</h3></div><div class="place"><span class="emoji">🌟</span><h4>بداية الاستكشاف</h4><p>شارة توضيحية ضمن النموذج التجريبي.</p><span style="color:#4c8a78;font-weight:bold">✓ مكتسبة</span></div><div class="place" style="margin-top:10px"><span class="emoji">🧭</span><h4>مستكشفة الحرم</h4><p>تُفتح تجريبيًا عند استعراض عدة وجهات.</p><button class="textbtn" onclick="exploreBadge()">جرّبي فتح الشارة</button></div></div>
+</section>
+</main>
+<nav class="bottom">
+ <button class="active" data-page="home"><span>⌂</span>الرئيسية</button><button data-page="map"><span>⌖</span>الخريطة</button><button data-page="ar"><span>✧</span>وجّهيني</button><button data-page="assistant"><span>✦</span>المساعد</button><button data-page="profile"><span>♙</span>ملفي</button>
+</nav>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const titles={home:'اكتشفي جامعتك بطريقة جديدة',map:'خريطة استكشاف الجامعة',ar:'وجّهيني نحو وجهتك',assistant:'المساعد الذكي التجريبي',profile:'ملفي الشخصي'};
+let currentPlace='مبنى الكليات', visitedSet=new Set(['مبنى الكليات','المكتبة','الخدمات الطلابية']);
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.getElementById('pageTitle').textContent=titles[id]||titles.home;window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display='none',3000)}
+function choosePlace(name,btn){currentPlace=name;visitedSet.add(name);document.getElementById('placeTitle').textContent=name;document.getElementById('placeDesc').textContent='وجهة مختارة ضمن النموذج التجريبي. ستُضاف التفاصيل الدقيقة عند اعتماد بيانات الجامعة الرسمية.';document.getElementById('arDest').textContent=name;document.getElementById('visited').textContent=String(visitedSet.size).padStart(2,'0');if(btn){document.querySelectorAll('.dest').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}toast('تم اختيار الوجهة: '+name)}
+function setARScene(file,label){const scene=document.getElementById('cameraScene');scene.style.backgroundImage='url("images/'+file+'")';document.getElementById('arDest').textContent=label;const title=label.split(' · ')[0];scene.querySelector('.cam-overlay h3').textContent=title;toast('تم عرض مشهد '+label+' داخل محاكاة نِبراس');}
+function setARDest(name){currentPlace=name;document.getElementById('arDest').textContent=name;visitedSet.add(name);document.getElementById('visited').textContent=String(visitedSet.size).padStart(2,'0');toast('تم تغيير الوجهة التجريبية إلى '+name)}
+const answers=[
+[/استكشاف|ابدأ|أبدأ|خريطة/i,'افتحي «خريطة الجامعة» ثم اختاري إحدى الوجهات لعرض بطاقة معلومات تجريبية.'],
+[/واقع معزز|معزز|AR/i,'الواقع المعزز يمكن أن يعرض إرشادات فوق مشهد الكاميرا. في هذا النموذج الأسهم محاكاة ولا ترتبط بالموقع أو اتجاه الهاتف.'],
+[/مكتبة|أصل|طريق|وجهة/i,'اختاري «المكتبة» من الخريطة، ثم اضغطي «جرّبي التوجيه» لمشاهدة محاكاة المسار.'],
+[/موقعي|خصوصية|حفظ/i,'هذا النموذج لا يطلب موقعك ولا يحفظه. الخريطة والوجهات توضيحية فقط.']
+];
+function addBubble(txt,cls=''){const d=document.createElement('div');d.className='bubble '+cls;d.textContent=txt;document.getElementById('chat').appendChild(d);document.getElementById('chat').scrollTop=99999}
+function answer(q){const match=answers.find(a=>a[0].test(q));return match?match[1]:'أقدر أساعدك في تجربة الخريطة، واختيار الوجهات، وفهم فكرة الواقع المعزز. جرّبي أحد الأسئلة الجاهزة بالأعلى. هذه إجابة تجريبية ضمن النموذج.'}
+function askPreset(q){addBubble(q,'me');setTimeout(()=>addBubble(answer(q)),180)}
+function sendChat(e){e.preventDefault();const input=document.getElementById('chatInput');const q=input.value.trim();if(!q)return;addBubble(q,'me');input.value='';setTimeout(()=>addBubble(answer(q)),220)}
+function exploreBadge(){document.getElementById('badges').textContent='02';document.getElementById('progress').textContent='50%';toast('مبروك! فُتحت شارة مستكشفة الحرم في النموذج التجريبي 🎉')}
+</script>
+</body></html>
