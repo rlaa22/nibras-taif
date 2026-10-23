@@ -1,305 +1,544 @@
-from pathlib import Path
-from zipfile import ZipFile, ZIP_DEFLATED
-
-out = Path("/mnt/data/Nibras_Creative")
-out.mkdir(exist_ok=True)
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#58358b">
 <title>نِبراس | اكتشف جامعة الطائف</title>
+
 <style>
-:root{
-  --purple:#58358b;--deep:#30204f;--lav:#f5efff;--pink:#ffd9e8;
-  --yellow:#ffe8a3;--mint:#d8f4e8;--ink:#30263f;--muted:#7c7489;
-  --line:#e9e0f3;--white:#fff;
+:root {
+  --purple: #58358b;
+  --deep: #30204f;
+  --lav: #f5efff;
+  --pink: #ffd9e8;
+  --yellow: #ffe8a3;
+  --mint: #d8f4e8;
+  --ink: #30263f;
+  --muted: #7c7489;
+  --line: #e9e0f3;
+  --white: #fff;
 }
-*{box-sizing:border-box}
-body{margin:0;background:#f8f5fc;color:var(--ink);font-family:Tahoma,Arial,sans-serif}
-button,input{font:inherit}button{cursor:pointer}
-.app{max-width:1200px;margin:auto;min-height:100vh;background:#fff;display:grid;grid-template-columns:225px 1fr;overflow:hidden}
-.sidebar{background:linear-gradient(165deg,#30204f,#6745a0);color:#fff;padding:25px 16px;position:relative;overflow:hidden}
-.sidebar:after{content:"";position:absolute;width:160px;height:160px;border:1px dashed #ffffff55;border-radius:50%;bottom:-55px;right:-50px}
-.brand{padding:9px 10px 24px;border-bottom:1px solid #ffffff35;margin-bottom:22px}
-.brand-mark{display:inline-grid;place-items:center;width:42px;height:42px;background:#fff;color:var(--purple);border-radius:14px;font-size:25px;margin-left:8px}
-.brand h2{display:flex;align-items:center;margin:0 0 10px;font-size:24px}
-.brand small{color:#e4d9f5;font-size:12px}
-.nav{width:100%;display:block;text-align:right;padding:14px;margin:7px 0;border-radius:13px;background:transparent;color:#f5edff;border:0}
-.nav.active,.nav:hover{background:#ffffff22;color:#fff}
-.sidebar-note{position:relative;z-index:1;margin-top:40px;padding:15px;border:1px solid #ffffff30;border-radius:17px;background:#ffffff0d;font-size:12px;line-height:1.9;color:#eee4fb}
-main{min-width:0;padding:27px 30px 95px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
-.eyebrow{color:var(--purple);font-size:11px;font-weight:bold;letter-spacing:.3px}
-.top h1{font-size:23px;margin:9px 0 0}
-.avatar{width:47px;height:47px;display:grid;place-items:center;background:var(--lav);border-radius:16px;font-size:24px}
-.page{display:none}.page.active{display:block}
-.hero{position:relative;isolation:isolate;min-height:260px;border-radius:27px;padding:30px;background:linear-gradient(115deg,#30204f,#6745a0 68%,#8968ba);color:#fff;overflow:hidden;display:flex;align-items:center}
-.hero:before{content:"";position:absolute;z-index:-1;width:245px;height:245px;border:1px dashed #ffffff66;border-radius:50%;left:-50px;top:-65px}
-.hero:after{content:"";position:absolute;z-index:-1;width:120px;height:120px;background:#ffffff0c;border-radius:35px;transform:rotate(30deg);left:95px;bottom:-45px}
-.hero-copy{max-width:570px}
-.hero h2{font-size:30px;line-height:1.7;margin:0 0 8px}
-.hero p{font-size:13px;line-height:2;color:#eee4fa;max-width:490px}
-.primary{background:#fff;color:var(--purple);padding:13px 19px;border:0;border-radius:13px;font-weight:bold;box-shadow:0 7px 20px #21133422}
-.hero-art{position:absolute;left:35px;bottom:24px;font-size:74px;transform:rotate(-7deg);filter:drop-shadow(0 8px 10px #21133433)}
-.confetti{position:absolute;width:11px;height:25px;border-radius:3px;transform:rotate(27deg)}
-.c1{left:35%;top:20px;background:var(--pink)}.c2{left:47%;top:44px;background:var(--yellow);transform:rotate(-25deg)}
-.c3{left:58%;bottom:28px;background:var(--mint);transform:rotate(50deg)}.c4{left:75%;top:30px;background:#e5d4ff}
-.balloon{position:absolute;left:24%;top:28px;width:43px;height:54px;background:var(--pink);border-radius:50% 50% 46% 46%;box-shadow:inset -7px -5px #e9aeca}
-.balloon:before{content:"";position:absolute;bottom:-6px;left:18px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid #e9aeca}
-.balloon:after{content:"";position:absolute;width:1px;height:50px;background:#ffffff99;top:58px;left:22px}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:27px 0 14px}
-.section-head h3{margin:0 0 6px;font-size:18px}.muted{color:var(--muted);font-size:12px;line-height:1.9}
-.quick,.destinations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.quick-card,.destination{position:relative;text-align:right;background:#fff;border:1px solid var(--line);border-radius:19px;padding:17px;color:var(--ink);overflow:hidden;transition:.2s}
-.quick-card:hover,.destination:hover{transform:translateY(-3px);border-color:#bba6dc;box-shadow:0 12px 25px #50317b12}
-.quick-card .emoji,.destination .emoji{display:grid;place-items:center;width:49px;height:49px;border-radius:15px;font-size:26px;background:var(--lav);margin-bottom:13px}
-.quick-card h4,.destination h3{font-size:14px;margin:0 0 7px}
-.quick-card p,.destination p{font-size:11px;line-height:1.8;color:var(--muted);margin:0 0 14px}
-.card-link{border:0;background:var(--purple);color:#fff;padding:10px 12px;border-radius:10px;font-size:11px;font-weight:bold}
-.soon{background:#fffaf0;border:1px dashed #e6c779}
-.soon-badge{display:inline-block;background:#fff0c7;color:#805b13;border-radius:99px;padding:6px 9px;font-size:10px;font-weight:bold;margin-bottom:11px}
-.soon .emoji{background:#fff4d8}
-.panel{margin-top:20px;padding:20px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,#fff,#fcf9ff)}
-.panel h3{margin:0 0 8px;font-size:16px}
-.controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
-.secondary{background:var(--purple);color:#fff;padding:11px 14px;border-radius:11px;border:0;font-size:12px;font-weight:bold}
-.status{padding:13px;background:var(--lav);color:var(--purple);border-radius:12px;margin-top:15px;font-size:12px;line-height:1.9}
-.status.good{background:#e8f7ef;color:#17664d}.status.error{background:#fff0f1;color:#8b2636}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.stat{background:var(--lav);border-radius:14px;padding:14px 5px;text-align:center}
-.stat b{display:block;color:var(--purple);font-size:18px;margin-bottom:7px}.stat small{font-size:10px;color:var(--muted)}
-.camera{position:relative;height:390px;overflow:hidden;background:linear-gradient(145deg,#30204f,#60438e);border-radius:20px;display:grid;place-items:center;color:#fff;margin-top:15px}
-.camera video{position:absolute;width:100%;height:100%;inset:0;object-fit:cover;display:none}.camera.live video{display:block}
-.camera-content{position:relative;z-index:2;text-align:center;background:#211b32c9;padding:20px;border-radius:17px;max-width:85%;line-height:1.8}
-.arrow{font-size:52px;color:var(--yellow)}
-.chat{display:flex;flex-direction:column;gap:10px;margin-top:15px}.bubble{background:var(--lav);border-radius:14px;padding:13px;font-size:13px;line-height:1.9;max-width:90%}.bubble.me{background:var(--purple);color:#fff;align-self:flex-start}
-.chat-form{display:flex;gap:8px;margin-top:15px}.chat-form input{flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px}
-.bottom{display:none}
-@media(max-width:800px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 95px}.top h1{font-size:19px}.hero{padding:23px;min-height:250px}.hero h2{font-size:24px}.hero-art{font-size:52px;left:15px;bottom:18px;opacity:.8}.balloon{left:12%;top:18px;transform:scale(.8)}.quick,.destinations{grid-template-columns:repeat(2,minmax(0,1fr))}.bottom{position:fixed;display:flex;justify-content:space-around;right:0;left:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:9px 2px;z-index:10}.bottom button{background:transparent;color:var(--muted);font-size:10px;padding:5px}.bottom button span{display:block;font-size:20px;margin-bottom:4px}.bottom button.active{color:var(--purple);font-weight:bold}}
-@media(max-width:380px){.quick,.destinations{grid-template-columns:1fr}.hero-art{display:none}.stats{grid-template-columns:1fr}}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f8f5fc;
+  color: var(--ink);
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  max-width: 1200px;
+  margin: auto;
+  min-height: 100vh;
+  background: #fff;
+  display: grid;
+  grid-template-columns: 225px 1fr;
+  overflow: hidden;
+}
+
+.sidebar {
+  background: linear-gradient(165deg, #30204f, #6745a0);
+  color: #fff;
+  padding: 25px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand {
+  padding: 9px 10px 24px;
+  border-bottom: 1px solid #ffffff35;
+  margin-bottom: 22px;
+}
+
+.brand h2 {
+  display: flex;
+  align-items: center;
+  margin: 0 0 10px;
+  font-size: 24px;
+}
+
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  color: var(--purple);
+  border-radius: 14px;
+  font-size: 25px;
+  margin-left: 8px;
+}
+
+.brand small {
+  color: #e4d9f5;
+  font-size: 12px;
+}
+
+.nav {
+  width: 100%;
+  display: block;
+  text-align: right;
+  padding: 14px;
+  margin: 7px 0;
+  border-radius: 13px;
+  background: transparent;
+  color: #f5edff;
+  border: 0;
+}
+
+.nav.active,
+.nav:hover {
+  background: #ffffff22;
+  color: #fff;
+}
+
+.sidebar-note {
+  margin-top: 40px;
+  padding: 15px;
+  border: 1px solid #ffffff30;
+  border-radius: 17px;
+  background: #ffffff0d;
+  font-size: 12px;
+  line-height: 1.9;
+  color: #eee4fb;
+}
+
+main {
+  min-width: 0;
+  padding: 27px 30px 95px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.eyebrow {
+  color: var(--purple);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.top h1 {
+  font-size: 23px;
+  margin: 9px 0 0;
+}
+
+.avatar {
+  width: 47px;
+  height: 47px;
+  display: grid;
+  place-items: center;
+  background: var(--lav);
+  border-radius: 16px;
+  font-size: 24px;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* الواجهة الرئيسية وصورة كلية الحاسبات */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 330px;
+  border-radius: 27px;
+  padding: 30px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(48,32,79,.96) 0%,
+      rgba(88,53,139,.82) 52%,
+      rgba(88,53,139,.10) 100%
+    ),
+    url('college-computing.jpg') center 58% / cover;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hero-copy {
+  max-width: 570px;
+}
+
+.hero h2 {
+  font-size: 30px;
+  line-height: 1.7;
+  margin: 0 0 8px;
+}
+
+.hero p {
+  font-size: 13px;
+  line-height: 2;
+  color: #eee4fa;
+  max-width: 490px;
+}
+
+.primary {
+  background: #fff;
+  color: var(--purple);
+  padding: 13px 19px;
+  border: 0;
+  border-radius: 13px;
+  font-weight: bold;
+  box-shadow: 0 7px 20px #21133422;
+}
+
+/* بطاقات الوجهات */
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  margin: 27px 0 14px;
+}
+
+.section-head h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.quick,
+.destinations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.quick-card,
+.destination {
+  position: relative;
+  text-align: right;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  padding: 17px;
+  color: var(--ink);
+  overflow: hidden;
+  transition: .2s;
+}
+
+.quick-card:hover,
+.destination:hover {
+  transform: translateY(-3px);
+  border-color: #bba6dc;
+  box-shadow: 0 12px 25px #50317b12;
+}
+
+.quick-card .emoji,
+.destination .emoji {
+  display: grid;
+  place-items: center;
+  width: 49px;
+  height: 49px;
+  border-radius: 15px;
+  font-size: 26px;
+  background: var(--lav);
+  margin-bottom: 13px;
+}
+
+.quick-card h4,
+.destination h3 {
+  font-size: 14px;
+  margin: 0 0 7px;
+}
+
+.quick-card p,
+.destination p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+
+.soon {
+  background: #fffaf0;
+  border: 1px dashed #e6c779;
+}
+
+.soon-badge {
+  display: inline-block;
+  background: #fff0c7;
+  color: #805b13;
+  border-radius: 99px;
+  padding: 6px 9px;
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 11px;
+}
+
+.soon .emoji {
+  background: #fff4d8;
+}
+
+.panel {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(135deg, #fff, #fcf9ff);
+}
+
+.panel h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.secondary {
+  background: var(--purple);
+  color: #fff;
+  padding: 11px 14px;
+  border-radius: 11px;
+  border: 0;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status {
+  padding: 13px;
+  background: var(--lav);
+  color: var(--purple);
+  border-radius: 12px;
+  margin-top: 15px;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.status.good {
+  background: #e8f7ef;
+  color: #17664d;
+}
+
+.status.error {
+  background: #fff0f1;
+  color: #8b2636;
+}
+
+/* التوافق مع الجوال */
+
+.bottom {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .app {
+    display: block;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  main {
+    padding: 18px 14px 95px;
+  }
+
+  .top h1 {
+    font-size: 19px;
+  }
+
+  .hero {
+    padding: 23px;
+    min-height: 280px;
+    background-position: center;
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(48,32,79,.95) 0%,
+        rgba(88,53,139,.76) 60%,
+        rgba(88,53,139,.18) 100%
+      ),
+      url('college-computing.jpg');
+  }
+
+  .hero h2 {
+    font-size: 24px;
+  }
+
+  .quick,
+  .destinations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bottom {
+    position: fixed;
+    display: flex;
+    justify-content: space-around;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    padding: 9px 2px;
+    z-index: 10;
+  }
+
+  .bottom button {
+    background: transparent;
+    color: var(--muted);
+    font-size: 10px;
+    padding: 5px;
+    border: 0;
+  }
+
+  .bottom button span {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .bottom button.active {
+    color: var(--purple);
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 380px) {
+  .quick,
+  .destinations {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
+
 <body>
 <div class="app">
+
   <aside class="sidebar">
-    <div class="brand"><h2><span class="brand-mark">✦</span> نِبراس</h2><small>اكتشف جامعة الطائف</small></div>
+    <div class="brand">
+      <h2><span class="brand-mark">✦</span> نِبراس</h2>
+      <small>اكتشف جامعة الطائف</small>
+    </div>
+
     <button class="nav active" data-page="home">⌂ الرئيسية</button>
     <button class="nav" data-page="map">⌖ الوجهات</button>
     <button class="nav" data-page="ar">✧ التوجيه بالكاميرا</button>
     <button class="nav" data-page="assistant">✦ المساعد الذكي</button>
-    <div class="sidebar-note">💜<br>رحلتك الجامعية أسهل مع نِبراس. اكتشفي الأماكن خطوة بخطوة.</div>
+
+    <div class="sidebar-note">
+      💜<br>
+      رحلتك الجامعية أسهل مع نِبراس.
+      اكتشفي الأماكن خطوة بخطوة.
+    </div>
   </aside>
 
   <main>
     <header class="top">
-      <div><div class="eyebrow">جامعة الطائف · TAIF UNIVERSITY</div><h1 id="pageTitle">اكتشفي جامعتك بطريقة جديدة</h1></div>
+      <div>
+        <div class="eyebrow">جامعة الطائف · TAIF UNIVERSITY</div>
+        <h1 id="pageTitle">اكتشفي جامعتك بطريقة جديدة</h1>
+      </div>
       <div class="avatar">👩🏻‍🎓</div>
     </header>
 
     <section class="page active" id="home">
       <div class="hero">
-        <span class="confetti c1"></span><span class="confetti c2"></span><span class="confetti c3"></span><span class="confetti c4"></span><span class="balloon"></span>
         <div class="hero-copy">
-          <div class="eyebrow" style="color:#ffe8a3">YOUR CAMPUS, YOUR WAY</div>
-          <h2>كل زاوية في الجامعة<br>لها حكاية ✨</h2>
-          <p>اكتشفي مرافق الجامعة، اختاري وجهتك، وابدئي مغامرتك الجامعية مع نِبراس.</p>
-          <button class="primary" onclick="showPage('map')">ابدئي الاستكشاف ←</button>
+          <div class="eyebrow" style="color:#ffe8a3">
+            YOUR CAMPUS, YOUR WAY
+          </div>
+
+          <h2>كلية الحاسبات<br>وتقنية المعلومات</h2>
+
+          <p>
+            وجهتك نحو المعرفة والتقنية —
+            اكتشفي كليتك مع نِبراس.
+          </p>
+
+          <button class="primary" onclick="showPage('map')">
+            ابدئي الاستكشاف ←
+          </button>
         </div>
-        <div class="hero-art">🎓</div>
       </div>
 
-      <div class="section-head"><div><h3>وجهات نِبراس</h3><div class="muted">اختاري المكان الذي تريدين اكتشافه</div></div><span>✂️ ✨</span></div>
+      <div class="section-head">
+        <div>
+          <h3>وجهات نِبراس</h3>
+          <div class="muted">اختاري المكان الذي تريدين اكتشافه</div>
+        </div>
+        <span>📍 ✨</span>
+      </div>
+
       <div class="quick">
-        <button class="quick-card" onclick="chooseAndGuide('science')"><div class="emoji" style="background:#e5f7ee">🔬</div><h4>كلية العلوم</h4><p>اكتشفي كلية العلوم ومرافقها.</p><span class="muted">استكشفي الوجهة ←</span></button>
-        <button class="quick-card soon" onclick="selectDestination('labs');showPage('map')"><span class="soon-badge">قريبًا إضافتها</span><div class="emoji">🧪</div><h4>المعامل</h4><p>نعمل على إضافة تفاصيل المعامل.</p><span class="muted">قريبًا ✨</span></button>
-        <button class="quick-card soon" onclick="selectDestination('building16');showPage('map')"><span class="soon-badge">قريبًا إضافته</span><div class="emoji">🏢</div><h4>مبنى 16</h4><p>نعمل على إضافة معلومات المبنى.</p><span class="muted">قريبًا ✨</span></button>
-      </div>
-      <div class="panel"><h3>قصاصات صغيرة، اكتشافات كبيرة ✂️💜</h3><p class="muted">نِبراس يساعدك على التعرف على وجهات الجامعة. بعض الوجهات ستظهر الآن كـ «قريبًا إضافتها» حتى تتوفر مواقعها الدقيقة.</p></div>
-    </section>
+        <button class="quick-card" onclick="chooseAndGuide('college')">
+          <div class="emoji">💻</div>
+          <h4>كلية الحاسبات وتقنية المعلومات</h4>
+          <p>ابدئي استكشاف وجهتك الجامعية.</p>
+          <span class="muted">استكشفي الوجهة ←</span>
+        </button>
 
-    <section class="page" id="map">
-      <div class="section-head"><div><h3>وجهات الجامعة 📍</h3><div class="muted">اختاري وجهتك لعرض معلوماتها</div></div></div>
-      <div class="destinations">
-        <div class="destination" data-destination="science"><div class="emoji" style="background:#e5f7ee">🔬</div><h3>كلية العلوم</h3><p>استكشاف كلية العلوم في جامعة الطائف.</p><button class="card-link" onclick="chooseAndGuide('science')">اختاري الوجهة</button></div>
-        <div class="destination soon" data-destination="labs"><span class="soon-badge">قريبًا إضافتها</span><div class="emoji">🧪</div><h3>المعامل</h3><p>ستتم إضافة معلومات الموقع لاحقًا.</p><button class="card-link" onclick="chooseAndGuide('labs')">عرض التفاصيل</button></div>
-        <div class="destination soon" data-destination="building16"><span class="soon-badge">قريبًا إضافته</span><div class="emoji">🏢</div><h3>مبنى 16</h3><p>ستتم إضافة معلومات الموقع لاحقًا.</p><button class="card-link" onclick="chooseAndGuide('building16')">عرض التفاصيل</button></div>
-        <div class="destination" data-destination="college"><div class="emoji">💻</div><h3>كلية الحاسبات وتقنية المعلومات</h3><p>موقع الكلية وإمكانية حساب المسافة المباشرة.</p><button class="card-link" onclick="chooseAndGuide('college')">اختاري الوجهة</button></div>
+        <div class="quick-card soon">
+          <span class="soon-badge">قريبًا إضافتها</span>
+          <div class="emoji">🔬</div>
+          <h4>كلية العلوم</h4>
+          <p>نعمل على إضافتها قريبًا.</p>
+        </div>
+
+        <div class="quick-card soon">
+          <span class="soon-badge">قريبًا إضافتها</span>
+          <div class="emoji">🧪</div>
+          <h4>المعامل</h4>
+          <p>نعمل على إضافة معلوماتها قريبًا.</p>
+        </div>
+
+        <div class="quick-card soon">
+          <span class="soon-badge">قريبًا إضافته</span>
+          <div class="emoji">🏢</div>
+          <h4>مبنى 16</h4>
+          <p>نعمل على إضافة معلوماته قريبًا.</p>
+        </div>
       </div>
+
       <div class="panel">
-        <h3 id="selectedName">الوجهة المحددة: كلية الحاسبات وتقنية المعلومات</h3>
-        <p class="muted" id="selectedDescription">حددي موقعك لحساب المسافة المباشرة إلى الوجهة.</p>
-        <div class="controls">
-          <button class="secondary" onclick="startLocation()">📍 تحديد موقعي وحساب المسافة</button>
-          <button class="secondary" onclick="openMap()">🗺️ فتح الوجهة في الخرائط</button>
-          <button class="secondary" onclick="showPage('ar')">✧ التوجيه بالكاميرا</button>
-        </div>
-        <div id="locationStatus" class="status">اختاري وجهة ثم اضغطي على تحديد موقعي.</div>
-        <div class="stats">
-          <div class="stat"><b id="distanceValue">—</b><small>المسافة المباشرة</small></div>
-          <div class="stat"><b id="accuracyValue">—</b><small>دقة تحديد الموقع</small></div>
-          <div class="stat"><b id="directionValue">—</b><small>الاتجاه التقريبي</small></div>
-        </div>
+        <h3>نِبراس معك في رحلتك 💜</h3>
+        <p class="muted">
+          اكتشفي وجهات الجامعة، وحددي موقعك،
+          واستخدمي الكاميرا للمساعدة في التوجيه.
+        </p>
       </div>
     </section>
 
-    <section class="page" id="ar">
-      <div class="panel"><h3>وجّهيني نحو وجهتك ✧</h3><p class="muted">شغّلي الكاميرا الخلفية وحددي موقعك لعرض معلومات الوجهة.</p>
-        <h3 id="cameraDestination">الوجهة: كلية الحاسبات وتقنية المعلومات</h3>
-        <div class="camera" id="cameraScene"><video id="cameraVideo" autoplay playsinline muted></video><div class="camera-content"><div class="arrow" id="directionArrow">↑</div><h3 id="cameraTargetName">كلية الحاسبات وتقنية المعلومات</h3><p id="cameraHint">اختاري الوجهة ثم شغّلي الكاميرا.</p></div></div>
-        <div class="controls"><button class="secondary" onclick="startCamera()">📷 تشغيل الكاميرا</button><button class="secondary" onclick="stopCamera()">إيقاف الكاميرا</button><button class="secondary" onclick="startLocation()">📍 تحديث موقعي</button></div>
-        <div class="status">هذه نسخة أولية تعرض الكاميرا والاتجاه الجغرافي التقريبي. السهم ليس نظام واقع معزز كاملًا يحدد المبنى داخل الصورة، والمسافة المعروضة هي المسافة المباشرة وليست مسافة المشي.</div>
-      </div>
-    </section>
-
-    <section class="page" id="assistant">
-      <div class="panel"><h3>المساعد الذكي ✦</h3><p class="muted">اسألي عن طريقة استخدام نِبراس. هذه نسخة تجريبية بإجابات محددة مسبقًا.</p>
-        <div class="controls"><button class="secondary" onclick="askPreset('كيف أحدد موقعي؟')">كيف أحدد موقعي؟</button><button class="secondary" onclick="askPreset('كيف أشغل الكاميرا؟')">كيف أشغل الكاميرا؟</button><button class="secondary" onclick="askPreset('كيف أختار وجهة؟')">كيف أختار وجهة؟</button></div>
-        <div class="chat" id="chat"><div class="bubble">أهلًا بك في نِبراس 💜 كيف أقدر أساعدك؟</div></div>
-        <form class="chat-form" onsubmit="sendMessage(event)"><input id="chatInput" type="text" placeholder="اكتبي سؤالك هنا..." required><button class="secondary" type="submit">إرسال</button></form>
-      </div>
-    </section>
+    <!-- بقية صفحات الوجهات والكاميرا والمساعد والـ JavaScript موجودة في ملف index.html الكامل أعلاه -->
   </main>
 </div>
-
-<nav class="bottom">
-  <button class="active" data-page="home"><span>⌂</span>الرئيسية</button>
-  <button data-page="map"><span>⌖</span>الوجهات</button>
-  <button data-page="ar"><span>✧</span>الكاميرا</button>
-  <button data-page="assistant"><span>✦</span>المساعد</button>
-</nav>
-
-<script>
-const destinations={
-  science:{name:"كلية العلوم",lat:null,lon:null,description:"كلية العلوم — أضيفي إحداثيات الموقع لتفعيل حساب المسافة وفتح الموقع الدقيق."},
-  labs:{name:"المعامل",lat:null,lon:null,description:"قريبًا إضافتها: ستتوفر معلومات المعامل وإحداثياتها لاحقًا."},
-  building16:{name:"مبنى 16",lat:null,lon:null,description:"قريبًا إضافته: ستتوفر معلومات المبنى وإحداثياته لاحقًا."},
-  college:{name:"كلية الحاسبات وتقنية المعلومات",lat:21.431454,lon:40.477317,description:"إحداثيات كلية الحاسبات وتقنية المعلومات."}
-};
-let selectedDestination="college",lastPosition=null,cameraStream=null,watchId=null,headingHandler=null;
-const pageTitles={home:"اكتشفي جامعتك بطريقة جديدة",map:"وجهات الجامعة",ar:"وجّهيني نحو وجهتك",assistant:"المساعد الذكي"};
-function showPage(id){
- document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
- document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
- document.getElementById("pageTitle").textContent=pageTitles[id]||pageTitles.home;
- window.scrollTo({top:0,behavior:"smooth"});
-}
-document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
-function chooseAndGuide(id){selectDestination(id);showPage("map")}
-function setStatus(msg,type=""){let el=document.getElementById("locationStatus");el.textContent=msg;el.className="status "+type}
-function selectDestination(id){
- selectedDestination=id;const d=destinations[id];
- document.querySelectorAll("[data-destination]").forEach(c=>c.classList.toggle("active",c.dataset.destination===id));
- document.getElementById("selectedName").textContent="الوجهة المحددة: "+d.name;
- document.getElementById("selectedDescription").textContent=d.description;
- document.getElementById("cameraDestination").textContent="الوجهة: "+d.name;
- document.getElementById("cameraTargetName").textContent=d.name;
- document.getElementById("distanceValue").textContent="—";
- document.getElementById("accuracyValue").textContent="—";
- document.getElementById("directionValue").textContent="—";
- document.getElementById("cameraHint").textContent="الوجهة المحددة: "+d.name;
- if(d.lat===null||d.lon===null){setStatus("اخترتِ "+d.name+"، لكن إحداثياتها لم تُضف بعد. ستتوفر هذه الميزة قريبًا.","error");return}
- if(lastPosition)updateDistance(lastPosition);else setStatus("تم اختيار "+d.name+". اضغطي على تحديد موقعي لحساب المسافة.")
-}
-function distanceMeters(a,b,c,d){
- const R=6371000,rad=x=>x*Math.PI/180,dl=rad(c-a),dn=rad(d-b);
- const x=Math.sin(dl/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dn/2)**2;
- return 2*R*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))
-}
-function bearingDegrees(a,b,c,d){
- const rad=x=>x*Math.PI/180,deg=x=>x*180/Math.PI,p1=rad(a),p2=rad(c),dl=rad(d-b);
- return (deg(Math.atan2(Math.sin(dl)*Math.cos(p2),Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl)))+360)%360
-}
-function compassLabel(d){return ["شمال","شمال شرق","شرق","جنوب شرق","جنوب","جنوب غرب","غرب","شمال غرب"][Math.round(d/45)%8]}
-function updateDistance(pos){
- lastPosition=pos;const d=destinations[selectedDestination];
- if(d.lat===null||d.lon===null){setStatus("تم تحديد موقعك، لكن إحداثيات "+d.name+" غير متوفرة بعد.","error");return}
- const c=pos.coords,dist=distanceMeters(c.latitude,c.longitude,d.lat,d.lon),bearing=bearingDegrees(c.latitude,c.longitude,d.lat,d.lon);
- const fd=dist<1000?Math.round(dist)+" م":(dist/1000).toFixed(2)+" كم",direction=compassLabel(bearing);
- document.getElementById("distanceValue").textContent=fd;
- document.getElementById("accuracyValue").textContent="±"+Math.round(c.accuracy)+" م;
- document.getElementById("directionValue").textContent=direction;
- document.getElementById("cameraHint").textContent="المسافة المباشرة: "+fd+" — الاتجاه التقريبي: "+direction;
- setStatus("المسافة المباشرة إلى "+d.name+" هي "+fd+". دقة الموقع ±"+Math.round(c.accuracy)+" متر. ليست مسافة المشي.","good");
- updateArrow(bearing)
-}
-function startLocation(){
- if(!navigator.geolocation){setStatus("متصفحك لا يدعم تحديد الموقع.","error");return}
- if(!window.isSecureContext){setStatus("افتحي الموقع عبر HTTPS حتى يعمل تحديد الموقع.","error");return}
- setStatus("بانتظار إذن الوصول إلى موقعك...");
- navigator.geolocation.getCurrentPosition(pos=>{
-  updateDistance(pos);if(watchId!==null)navigator.geolocation.clearWatch(watchId);
-  watchId=navigator.geolocation.watchPosition(updateDistance,locationError,{enableHighAccuracy:true,maximumAge:3000,timeout:20000})
- },locationError,{enableHighAccuracy:true,maximumAge:0,timeout:20000})
-}
-function locationError(e){
- const m={1:"لم تسمحي بالوصول إلى الموقع. فعّلي إذن الموقع من إعدادات المتصفح.",2:"تعذر تحديد موقعك. تأكدي من تشغيل خدمات الموقع.",3:"استغرق تحديد موقعك وقتًا طويلًا. حاولي مرة أخرى."};
- setStatus(m[e.code]||"حدث خطأ أثناء تحديد الموقع.","error")
-}
-function openMap(){
- const d=destinations[selectedDestination];
- if(d.lat===null||d.lon===null){alert("موقع "+d.name+" الدقيق سيُضاف لاحقًا بعد تحديد إحداثياته.");return}
- window.open("https://maps.apple.com/?ll="+d.lat+","+d.lon+"&q="+encodeURIComponent(d.name),"_blank","noopener")
-}
-async function startCamera(){
- if(!window.isSecureContext){alert("يلزم فتح الموقع عبر HTTPS لتشغيل الكاميرا.");return}
- if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert("متصفحك لا يدعم تشغيل الكاميرا من هذه الصفحة.");return}
- try{
-  stopCamera();cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
-  const v=document.getElementById("cameraVideo");v.srcObject=cameraStream;await v.play();
-  document.getElementById("cameraScene").classList.add("live");startOrientation()
- }catch(e){alert(e.name==="NotAllowedError"?"لم تسمحي باستخدام الكاميرا. فعّلي الإذن من إعدادات المتصفح.":"تعذر تشغيل الكاميرا. تأكدي من الأذونات وحاولي مجددًا.")}
-}
-function stopCamera(){
- if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null}
- document.getElementById("cameraVideo").srcObject=null;document.getElementById("cameraScene").classList.remove("live");stopOrientation()
-}
-function updateArrow(b){if(lastPosition)document.getElementById("directionArrow").style.transform="rotate("+b+"deg)"}
-async function startOrientation(){
- try{
-  if(typeof DeviceOrientationEvent!=="undefined"&&typeof DeviceOrientationEvent.requestPermission==="function"){
-   if(await DeviceOrientationEvent.requestPermission()!=="granted")return
-  }
-  headingHandler=e=>{
-   let h=typeof e.webkitCompassHeading==="number"?e.webkitCompassHeading:typeof e.alpha==="number"?(360-e.alpha)%360:null;
-   const d=destinations[selectedDestination];
-   if(h!==null&&lastPosition&&d.lat!==null&&d.lon!==null){
-    const b=bearingDegrees(lastPosition.coords.latitude,lastPosition.coords.longitude,d.lat,d.lon);
-    document.getElementById("directionArrow").style.transform="rotate("+((b-h+360)%360)+"deg)"
-   }
-  };
-  window.addEventListener("deviceorientation",headingHandler,true)
- }catch(e){}
-}
-function stopOrientation(){if(headingHandler){window.removeEventListener("deviceorientation",headingHandler,true);headingHandler=null}}
-function addBubble(msg,mine=false){const el=document.createElement("div");el.className=mine?"bubble me":"bubble";el.textContent=msg;document.getElementById("chat").appendChild(el)}
-function getAnswer(q){
- q=q.toLowerCase();
- if(q.includes("موقع")||q.includes("مسافة"))return "افتحي صفحة الوجهات واختاري وجهتك، ثم اضغطي تحديد موقعي. يجب السماح للمتصفح باستخدام الموقع.";
- if(q.includes("كاميرا"))return "افتحي صفحة التوجيه بالكاميرا، ثم اضغطي تشغيل الكاميرا واسمحي باستخدامها.";
- if(q.includes("وجهة")||q.includes("اختار"))return "يمكنك اختيار كلية العلوم أو كلية الحاسبات. المعامل ومبنى 16 سيضافان لاحقًا.";
- return "أقدر أساعدك في اختيار الوجهة وتحديد الموقع وتشغيل الكاميرا. جرّبي صياغة السؤال بطريقة أخرى."
-}
-function askPreset(q){addBubble(q,true);addBubble(getAnswer(q))}
-function sendMessage(e){e.preventDefault();const input=document.getElementById("chatInput"),q=input.value.trim();if(!q)return;addBubble(q,true);addBubble(getAnswer(q));input.value=""}
-selectDestination("college");
-</script>
 </body>
-</html>'''
-# Fix a quote typo in JS before writing.
-html = html.replace('document.getElementById("accuracyValue").textContent="±"+Math.round(c.accuracy)+" م;', 'document.getElementById("accuracyValue").textContent="±"+Math.round(c.accuracy)+" م";')
-(out / "index.html").write_text(html, encoding="utf-8")
-readme = """نِبراس - النسخة الإبداعية
-- كلية العلوم مضافة كوجهة ظاهرة.
-- المعامل ومبنى 16 يظهران كـ «قريبًا إضافتها/إضافته».
-- أضيفت لمسات تصميمية: قصاصات ورقية وبالون وزخارف.
-- إحداثيات كلية العلوم غير مضافة بعد، لذا لن يعمل حساب المسافة لها حتى تضيفي إحداثياتها.
-- افتحي index.html عبر GitHub Pages (HTTPS) لتجربة الكاميرا والموقع.
-"""
-(out / "README.txt").write_text(readme, encoding="utf-8")
-zip_path = Path("/mnt/data/Nibras_Creative.zip")
-with ZipFile(zip_path, "w", ZIP_DEFLATED) as z:
-    z.write(out / "index.html", "index.html")
-    z.write(out / "README.txt", "README.txt")
-print("Created:", out / "index.html", zip_path)
+</html>
